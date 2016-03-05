@@ -9,6 +9,7 @@ To create a simple n x n boggle solver, useful for cheating at games such as Ruz
 ```
 make boggle n
 ```
+##### Note that only a board size of 4 is currently supported.
 
 The resulting executable does not perform user input checks, and simply takes 4 letters, separated
 by spaces, at each newline. After 4 lines, the program spits out all found words.
