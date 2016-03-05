@@ -5,9 +5,9 @@ Implemented the back-end functionality of boggle, which is mainly focused on fin
 as defined in the lexicon, boglex.txt. My implementation uses a multiway trie for speed when finding
 words, and includes some optimization regarding skipping sequences that aren't prefixes.
 
-To create a simple 4x4 boggle solver, useful for cheating at games such as Ruzzle, execute:  
+To create a simple n x n boggle solver, useful for cheating at games such as Ruzzle, execute:  
 ```
-make boggle
+make boggle n
 ```
 
 The resulting executable does not perform user input checks, and simply takes 4 letters, separated
