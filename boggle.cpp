@@ -10,6 +10,17 @@
 #include <set>
 #include <fstream>
 
+struct strlencmp {
+    bool operator() (const string& lhs, const string& rhs) const {
+        const size_t lhsLen = lhs.length();
+        const size_t rhsLen = rhs.length();
+
+        if (lhsLen == rhsLen) return lhs < rhs;
+
+        return (lhsLen < rhsLen);
+    }
+};
+
 int main (int argc, char* argv[]) {
 
   if (argc != 2) {
@@ -65,7 +76,7 @@ int main (int argc, char* argv[]) {
       lex.insert(word);
       i++;
   }
-  std::cout << "read: " << lex.size() << std:: endl;
+  //std::cout << "read: " << lex.size() << std:: endl;
   infile.close();
 
   p->buildLexicon(lex);
@@ -74,11 +85,18 @@ int main (int argc, char* argv[]) {
 
   p->getAllValidWords(atoi(argv[1]), &words);
 
-  int count = 0;
-  std::cout << "Found words: " << std::endl;
+  //sort by len
+  set<string, strlencmp> sorted;
   std::set<string>::iterator it;
   for (it = words.begin(); it != words.end(); ++it) {
-      std::cout << *it << std::endl;
+      sorted.insert(*it);
+  }
+
+  int count = 0;
+  std::cout << "Found words: " << std::endl;
+  std::set<string, strlencmp>::iterator itt;
+  for (itt = sorted.begin(); itt != sorted.end(); ++itt) {
+      std::cout << *itt << std::endl;
       count++;
   }
 
