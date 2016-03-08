@@ -9,6 +9,8 @@
 #include <string>
 #include <set>
 #include <fstream>
+#include <utility>
+#include <unordered_map>
 
 struct strlencmp {
     bool operator() (const string& lhs, const string& rhs) const {
@@ -20,6 +22,58 @@ struct strlencmp {
         return (lhsLen < rhsLen);
     }
 };
+
+typedef std::unordered_map<char,int> dict;
+static dict getWeights() {
+    dict weights;
+    weights['a'] = 1;
+    weights['b'] = 4;
+    weights['c'] = 4;
+    weights['d'] = 2;
+    weights['e'] = 1;
+    weights['f'] = 1;
+    weights['g'] = 3;
+    weights['h'] = 4;
+    weights['i'] = 1;
+    weights['j'] = 8;
+    weights['k'] = 5;
+    weights['l'] = 1;
+    weights['m'] = 3;
+    weights['n'] = 1;
+    weights['o'] = 1;
+    weights['p'] = 4;
+    weights['q'] = 10;
+    weights['r'] = 1;
+    weights['s'] = 1;
+    weights['t'] = 1;
+    weights['u'] = 2;
+    weights['v'] = 4;
+    weights['w'] = 4;
+    weights['x'] = 8;
+    weights['y'] = 4;
+    weights['z'] = 10;
+
+    return weights;
+}
+
+typedef std::pair<string,int> ruzWord;
+struct ruzWordCmp {
+    bool operator() (const ruzWord& lhs, const ruzWord& rhs) const {
+        if (lhs.second == rhs.second) return lhs.first.compare(rhs.first);
+        return lhs.second < rhs.second;
+    }
+};
+
+int getValue(std::string s, dict& d) {
+    int val = 0;
+    for (int i = 0; i < s.length(); ++i) {
+        val += d[s[i]];
+    }
+
+    val += (s.length() - 4) * 5;
+
+    return val;
+}
 
 int main (int argc, char* argv[]) {
 
@@ -85,18 +139,28 @@ int main (int argc, char* argv[]) {
 
   p->getAllValidWords(atoi(argv[1]), &words);
 
+  /*
   //sort by len
   set<string, strlencmp> sorted;
   std::set<string>::iterator it;
   for (it = words.begin(); it != words.end(); ++it) {
       sorted.insert(*it);
+  }*/
+
+  set<ruzWord, ruzWordCmp> sorted;
+  std::set<string>::iterator it;
+  dict d = getWeights();
+  for (it = words.begin(); it != words.end(); ++it) {
+      sorted.insert(ruzWord(*it, getValue(*it, d)));
   }
 
   int count = 0;
   std::cout << "Found words: " << std::endl;
-  std::set<string, strlencmp>::iterator itt;
+  //std::set<string, strlencmp>::iterator itt;
+  std::set<ruzWord, ruzWordCmp>::iterator itt;
   for (itt = sorted.begin(); itt != sorted.end(); ++itt) {
-      std::cout << *itt << std::endl;
+      //std::cout << *itt << std::endl;
+      std::cout << (*itt).first << " " << (*itt).second << std::endl;
       count++;
   }
 
